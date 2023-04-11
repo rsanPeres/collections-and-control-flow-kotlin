@@ -3,7 +3,7 @@ package com.collections
 import com.dominio.Cats
 import kotlin.collections.List
 
-class CatSiter(private val catSiter : MutableList<Cats>) {
+class CatSitter(private val catSiter : MutableList<Cats>) {
     fun addCats(cat : Cats) {
         catSiter.add(cat)
     }

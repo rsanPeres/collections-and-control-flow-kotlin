@@ -1,10 +1,11 @@
-import com.collections.CatSiter
+import com.Api.VeterinarianRequest
+import com.collections.CatSitter
 import com.collections.Clinic
 import com.control.flow.When
 import com.dominio.Cats
 import com.dominio.Owners
 import com.dominio.Veterinarian
-import java.text.DateFormat
+import com.dominio.enums.CareType
 import java.time.LocalDateTime
 
 fun main(args: Array<String>) {
@@ -23,18 +24,23 @@ fun main(args: Array<String>) {
 
     println(if (cats.owners.size > 1) "maior" else "menor")
 
-    val catSiter : CatSiter = CatSiter(mutableListOf<Cats>())
-    catSiter.addCats(cats)
-    catSiter.addCats(Cats("Flor", listOf(Owners("Rafaela"), Owners("Matheus"))))
+    val catSitter : CatSitter = CatSitter(mutableListOf<Cats>())
+    catSitter.addCats(cats)
+    catSitter.addCats(Cats("Flor", listOf(Owners("Rafaela"), Owners("Matheus"))))
 
-    catSiter.copyToRead(catSiter.getCats()).forEach{
+    catSitter.copyToRead(catSitter.getCats()).forEach{
         i -> println("Little cat : ${i.name}")
     }
 
-    val vet : Veterinarian = Veterinarian("João", "CV1234")
-    val clinic : Clinic = Clinic(mutableMapOf(LocalDateTime.now() to mutableMapOf(vet to cats)), mutableSetOf<Veterinarian>())
+    val vetRequest: VeterinarianRequest = VeterinarianRequest("Joao", "CV1234", mutableListOf())
+    vetRequest.validate()
+    val vet : Veterinarian? = vetRequest?.let {
+        it.mapToObject()
+    }.also { it?.sayHello(it) }
+
+    val clinic : Clinic = Clinic(mutableMapOf(LocalDateTime.now() to mutableMapOf(vet to cats)), mutableSetOf<Veterinarian>(), mutableMapOf<CareType, Double>())
     clinic.scheduling(
-        LocalDateTime.of(1, 10, 5, 30, 30),Veterinarian("Maria", "CV2345"), cats)
+        LocalDateTime.of(1, 10, 5, 20, 30),Veterinarian("Maria", "CV2345", mutableListOf()), cats)
     clinic.schedulingReport()
 
 
